@@ -5,16 +5,12 @@ An alternative to Windows [TraceView](https://docs.microsoft.com/en-us/windows-h
 This is forked from [arbego/ETViewer](https://github.com/arbego/ETViewer)  
 I've labeled arbego's changes as v1.2 and mine as v1.2.x.  I've also left the tested platforms block of text below alone, though I've only tested on Win10 1903 64-bit.
 
-<div style="margin:30px;padding:5px;border:1px solid black;background-color:#D3E1E4">
-<b>Original Description</b>
-<br>
-This is a fork of ETViewer project on <a href=https://etviewer.codeplex.com/>codeplex</a> maintained by <a href=https://www.codeplex.com/site/users/view/Ellery_Pierce>Ellery_Pierce</a>
- and <a href=https://www.codeplex.com/site/users/view/jmartin>jmartin</a>.  Since codeplex is shutting down I forked
-this project to preserve it for the open source community.
-</div>
-
-
 ![ETViewer screenshot](docs/Home_HighlightSample.jpg)
+
+#### Original Description
+This is a fork of ETViewer project on [codeplex](https://etviewer.codeplex.com) maintained by [Ellery_Pierce](https://www.codeplex.com/site/users/view/Ellery_Pierce)
+ and [jmartin](https://www.codeplex.com/site/users/view/jmartin).  Since codeplex is shutting down I forked
+this project to preserve it for the open source community.
 
 ## System Requirements
 Windows XP or higher.
