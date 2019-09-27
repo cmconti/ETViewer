@@ -332,7 +332,7 @@ CAPTION "About ETViewer"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,12,12,20,20
-    LTEXT           "ETViewer Version 0.9",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "ETViewer Version 1.2.1",IDC_STATIC,40,10,119,8,SS_NOPREFIX
     LTEXT           "Javier Martín García.  ",IDC_STATIC,40,25,69,8
     DEFPUSHBUTTON   "Ok",IDOK,241,7,50,16,WS_GROUP
     RTEXT           "Feature requests or bug reports :",IDC_STATIC,22,58,110,8,SS_NOPREFIX
@@ -518,8 +518,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,0
- PRODUCTVERSION 1,0,0,0
+ FILEVERSION 1,2,1,0
+ PRODUCTVERSION 1,2,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -532,21 +532,21 @@ VS_VERSION_INFO VERSIONINFO
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "0c0a04e4"
+        BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "Javier Martín García"
             VALUE "FileDescription", "Event Tracing Viewer"
-            VALUE "FileVersion", "1.0.0.0"
+            VALUE "FileVersion", "1.2.1.0"
             VALUE "InternalName", "ETViewer"
             VALUE "LegalCopyright", "Javier Martín García.  "
             VALUE "OriginalFilename", "ETViewer.exe"
             VALUE "ProductName", "ETViewer"
-            VALUE "ProductVersion", "1.0.0.0"
+            VALUE "ProductVersion", "1.2.1.0"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0xc0a, 1252
+        VALUE "Translation", 0x409, 1252
     END
 END
 
@@ -562,6 +562,11 @@ BEGIN
 END
 
 IDD_FILTER_DIALOG_BAR AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_ABOUTBOX AFX_DIALOG_LAYOUT
 BEGIN
     0
 END
