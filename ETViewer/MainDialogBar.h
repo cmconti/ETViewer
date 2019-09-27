@@ -37,15 +37,15 @@ public:
     enum { IDD = IDD_MAIN_DIALOG_BAR };
     //}}AFX_DATA
 
-    CButton	m_BTStartStop;
     CButton	m_BTOpenFile;
     CButton	m_BTShowSourceContainer;
-    CButton	m_BTEnsureVisible;
-    CButton	m_BTSave;
-    CButton	m_BTHighlightFilters;
-    CButton	m_BTFind;
+    CButton	m_BTStartStop;
     CButton	m_BTClear;
     CButton	m_BTClearSelected;
+    CButton	m_BTEnsureVisible;
+    CButton	m_BTHighlightFilters;
+    CButton	m_BTFind;
+    CButton	m_BTSave;
     CEdit	m_EDErrorLookup;
     CButton	m_BTErrorLookup;
 
