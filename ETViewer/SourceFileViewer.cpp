@@ -299,9 +299,9 @@ BOOL CSourceFileViewer::OnInitDialog()
     m_hFileFont=CreateFontIndirect(&logFont);
     m_EDFile.SendMessage(WM_SETFONT,(DWORD)m_hFileFont,true);
 
-    m_OldEditProc=GetWindowLong(m_EDFile.m_hWnd,GWL_WNDPROC);
-    SetWindowLong(m_EDFile.m_hWnd,GWL_WNDPROC,(DWORD)FileEditProc);
-    SetWindowLong(m_EDFile.m_hWnd,GWL_USERDATA,(DWORD)this);
+    m_OldEditProc=GetWindowLongPtr (m_EDFile.m_hWnd, GWLP_WNDPROC);
+    SetWindowLongPtr(m_EDFile.m_hWnd,GWLP_WNDPROC,(LONG_PTR)FileEditProc);
+    SetWindowLongPtr(m_EDFile.m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
     m_hFindOwner=m_EDFile.m_hWnd;
     return FALSE;  // return TRUE unless you set the focus to a control
                   // EXCEPTION: OCX Property Pages should return FALSE
@@ -409,7 +409,7 @@ void CSourceFileViewer::ShowFindDialog()
 
 LRESULT CALLBACK CSourceFileViewer::FileEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    CSourceFileViewer *pThis=(CSourceFileViewer *)GetWindowLong(hwnd,GWL_USERDATA);
+    CSourceFileViewer *pThis=(CSourceFileViewer *)GetWindowLongPtr (hwnd, GWLP_USERDATA);
     if(uMsg==WM_RBUTTONDOWN)
     {
         long begin=0,end=0;

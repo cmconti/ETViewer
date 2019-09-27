@@ -74,13 +74,13 @@ void CFilterDialogBar::InitDialogBar()
         m_CBExcludeFilter.AddString(theApp.m_InstantExcludeFilterList[x].c_str());
     }
 
-    m_OldIncludeEditProc=(WNDPROC)GetWindowLong(m_EDIncludeEdit.m_hWnd,GWL_WNDPROC);
-    SetWindowLong(m_EDIncludeEdit.m_hWnd,GWL_USERDATA,(DWORD)this);
-    SetWindowLong(m_EDIncludeEdit.m_hWnd,GWL_WNDPROC,(DWORD)InstantEditProc);
+    m_OldIncludeEditProc=(WNDPROC)GetWindowLongPtr (m_EDIncludeEdit.m_hWnd, GWLP_WNDPROC);
+    SetWindowLongPtr(m_EDIncludeEdit.m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
+    SetWindowLongPtr(m_EDIncludeEdit.m_hWnd,GWLP_WNDPROC,(LONG_PTR)InstantEditProc);
 
-    m_OldExcludeEditProc=(WNDPROC)GetWindowLong(m_EDExcludeEdit.m_hWnd,GWL_WNDPROC);
-    SetWindowLong(m_EDExcludeEdit.m_hWnd,GWL_USERDATA,(DWORD)this);
-    SetWindowLong(m_EDExcludeEdit.m_hWnd,GWL_WNDPROC,(DWORD)InstantEditProc);
+    m_OldExcludeEditProc=(WNDPROC)GetWindowLongPtr (m_EDExcludeEdit.m_hWnd, GWLP_WNDPROC);
+    SetWindowLongPtr(m_EDExcludeEdit.m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
+    SetWindowLongPtr(m_EDExcludeEdit.m_hWnd,GWLP_WNDPROC,(LONG_PTR)InstantEditProc);
 
     m_EDIncludeEdit.SetWindowText(theApp.m_InstantIncludeFilter.c_str());
     m_EDExcludeEdit.SetWindowText(theApp.m_InstantExcludeFilter.c_str());
@@ -88,7 +88,7 @@ void CFilterDialogBar::InitDialogBar()
 
 LRESULT CALLBACK CFilterDialogBar::InstantEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    CFilterDialogBar *pThis=(CFilterDialogBar *)GetWindowLong(hwnd,GWL_USERDATA);
+    CFilterDialogBar *pThis=(CFilterDialogBar *)GetWindowLongPtr (hwnd, GWLP_USERDATA);
     if(uMsg==WM_MOUSEWHEEL){return 0L;}
     if(uMsg==WM_KEYDOWN || uMsg==WM_SYSKEYDOWN)
     {

@@ -160,9 +160,9 @@ int CETViewerView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     GetListCtrl().SetExtendedStyle(	LVS_EX_FULLROWSELECT|LVS_EX_HEADERDRAGDROP|LVS_EX_INFOTIP);
 
-    m_OldListViewProc=(WNDPROC)GetWindowLong(GetListCtrl().m_hWnd,GWL_WNDPROC);
-    SetWindowLong(GetListCtrl().m_hWnd,GWL_USERDATA,(DWORD)this);
-    SetWindowLong(GetListCtrl().m_hWnd,GWL_WNDPROC,(DWORD)ListViewProc);
+    m_OldListViewProc=(WNDPROC)GetWindowLongPtr (GetListCtrl().m_hWnd, GWLP_WNDPROC);
+    SetWindowLongPtr(GetListCtrl().m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
+    SetWindowLongPtr(GetListCtrl().m_hWnd,GWLP_WNDPROC,(LONG_PTR)ListViewProc);
 
     ListView_SetImageList(GetListCtrl().m_hWnd,m_hImageList,LVSIL_SMALL);
     m_iHollowImage=ImageList_AddIcon(m_hImageList,m_hHollowIcon);
@@ -590,7 +590,7 @@ TCHAR *CETViewerView::GetTraceText(SETViewerTrace *pTrace,CColumnInfo *pColumn,T
 
 LRESULT CALLBACK CETViewerView::ListViewProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    CETViewerView *pThis=(CETViewerView *)GetWindowLong(hwnd,GWL_USERDATA);
+    CETViewerView *pThis=(CETViewerView *)GetWindowLongPtr (hwnd, GWLP_USERDATA);
     if(uMsg==WM_ERASEBKGND)
     {
         int itemCount=pThis->GetListCtrl().GetItemCount();
@@ -704,7 +704,7 @@ void CETViewerView::RemoveColumn(int id)
 
 LRESULT CALLBACK CETViewerView::ListEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    CETViewerView *pThis=(CETViewerView *)GetWindowLong(hwnd,GWL_USERDATA);
+    CETViewerView *pThis=(CETViewerView *)GetWindowLongPtr (hwnd, GWLP_USERDATA);
     if(uMsg==WM_MOVE)
     {
         ::SetWindowPos(hwnd,NULL,pThis->m_ListEditPos.x,pThis->m_ListEditPos.y,pThis->m_ListEditSize.cx,pThis->m_ListEditSize.cy,SWP_NOZORDER);
@@ -1250,7 +1250,7 @@ void CETViewerView::ProcessUnknownTrace(STraceEvenTracingNormalizedData *pTraceD
     ReleaseMutex(m_hTracesMutex);
 }
 
-void CETViewerView::OnTimer(UINT nIDEvent) 
+void CETViewerView::OnTimer(UINT_PTR nIDEvent)
 {
     if(nIDEvent==CAPTURE_TIMER)
     {
@@ -1366,9 +1366,9 @@ void CETViewerView::OnBeginEdit(NMHDR *pNMHDR, LRESULT *pResult)
 
     // Hook window
 
-    m_OldListEditProc=(WNDPROC)GetWindowLong(m_pEdit->m_hWnd,GWL_WNDPROC);
-    SetWindowLong(m_pEdit->m_hWnd,GWL_USERDATA,(DWORD)this);
-    SetWindowLong(m_pEdit->m_hWnd,GWL_WNDPROC,(DWORD)ListEditProc);
+    m_OldListEditProc=(WNDPROC)GetWindowLongPtr (m_pEdit->m_hWnd, GWLP_WNDPROC);
+    SetWindowLongPtr(m_pEdit->m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
+    SetWindowLongPtr(m_pEdit->m_hWnd,GWLP_WNDPROC,(LONG_PTR)ListEditProc);
 
     *pResult = 0;
 }

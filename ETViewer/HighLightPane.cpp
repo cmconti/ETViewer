@@ -81,10 +81,10 @@ int CHighLightPane::OnCreate(LPCREATESTRUCT lpCreateStruct)
     GetListCtrl().InsertColumn(1,_T("HighLight Filters"),LVCFMT_LEFT,400,0);
     GetListCtrl().SetExtendedStyle(LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES|LVS_EX_INFOTIP|LVS_EX_CHECKBOXES);
 
-    m_OldListViewProc=(WNDPROC)GetWindowLong(GetListCtrl().m_hWnd,GWL_WNDPROC);
-    SetWindowLong(GetListCtrl().m_hWnd,GWL_STYLE,GetListCtrl().GetStyle()|LVS_EDITLABELS);
-    SetWindowLong(GetListCtrl().m_hWnd,GWL_USERDATA,(DWORD)this);
-    SetWindowLong(GetListCtrl().m_hWnd,GWL_WNDPROC,(DWORD)ListViewProc);
+    m_OldListViewProc=(WNDPROC)GetWindowLongPtr (GetListCtrl().m_hWnd, GWLP_WNDPROC);
+    SetWindowLongPtr(GetListCtrl().m_hWnd,GWL_STYLE,GetListCtrl().GetStyle()|LVS_EDITLABELS);
+    SetWindowLongPtr(GetListCtrl().m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
+    SetWindowLongPtr(GetListCtrl().m_hWnd,GWLP_WNDPROC,(LONG_PTR)ListViewProc);
     ListView_SetImageList(GetListCtrl().m_hWnd,m_hImageList,LVSIL_SMALL);
 
     CFont font;
@@ -165,7 +165,7 @@ void CHighLightPane::OnDestroy()
 
 LRESULT CALLBACK CHighLightPane::ListViewProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    CHighLightPane *pThis=(CHighLightPane *)GetWindowLong(hwnd,GWL_USERDATA);
+    CHighLightPane *pThis=(CHighLightPane *)GetWindowLongPtr (hwnd, GWLP_USERDATA);
     if(uMsg==WM_USER+100)
     {
         pThis->SaveFilters();

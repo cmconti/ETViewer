@@ -127,9 +127,9 @@ BOOL CSettingsDialog::OnInitDialog()
     m_LWSourcePaths.InsertColumn(1,_T("Path"),LVCFMT_LEFT,400,0);
     m_LWSourcePaths.SetExtendedStyle(LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES|LVS_EX_INFOTIP);
     
-    m_OldListViewProc=(WNDPROC)GetWindowLong(m_LWSourcePaths.m_hWnd,GWL_WNDPROC);
-    SetWindowLong(m_LWSourcePaths.m_hWnd,GWL_USERDATA,(DWORD)this);
-    SetWindowLong(m_LWSourcePaths.m_hWnd,GWL_WNDPROC,(DWORD)ListViewProc);
+    m_OldListViewProc=(WNDPROC)GetWindowLongPtr (m_LWSourcePaths.m_hWnd, GWLP_WNDPROC);
+    SetWindowLongPtr(m_LWSourcePaths.m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
+    SetWindowLongPtr(m_LWSourcePaths.m_hWnd,GWLP_WNDPROC,(LONG_PTR)ListViewProc);
 
     m_CBAssociateETL.SetCheck(theApp.m_bAssociateETL?BST_CHECKED:BST_UNCHECKED);
     m_CBAssociatePDB.SetCheck(theApp.m_bAssociatePDB?BST_CHECKED:BST_UNCHECKED);
@@ -156,7 +156,7 @@ BOOL CSettingsDialog::OnInitDialog()
 
 LRESULT CALLBACK CSettingsDialog::ListViewProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    CSettingsDialog *pThis=(CSettingsDialog *)GetWindowLong(hwnd,GWL_USERDATA);
+    CSettingsDialog *pThis=(CSettingsDialog *)GetWindowLongPtr (hwnd, GWLP_USERDATA);
     if(uMsg==WM_KEYDOWN)
     {
         bool pushedLControl=(GetKeyState(VK_LCONTROL)>>15)?true:false;

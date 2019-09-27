@@ -159,7 +159,7 @@ void CHighLightFiltersEditor::OnDestroy()
 
 LRESULT CALLBACK CHighLightFiltersEditor::ListViewProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
-    CHighLightFiltersEditor *pThis=(CHighLightFiltersEditor *)GetWindowLong(hwnd,GWL_USERDATA);
+    CHighLightFiltersEditor *pThis=(CHighLightFiltersEditor *)GetWindowLongPtr (hwnd, GWLP_USERDATA);
     if(uMsg==WM_KEYDOWN)
     {
         bool pushedLControl=(GetKeyState(VK_LCONTROL)>>15)?true:false;
@@ -212,10 +212,10 @@ BOOL CHighLightFiltersEditor::OnInitDialog()
     m_LWFilters.InsertColumn(1,_T("Filter"),LVCFMT_LEFT,400,0);
     m_LWFilters.SetExtendedStyle(LVS_EX_FULLROWSELECT|LVS_EX_GRIDLINES|LVS_EX_INFOTIP|LVS_EX_CHECKBOXES);
 
-    m_OldListViewProc=(WNDPROC)GetWindowLong(m_LWFilters.m_hWnd,GWL_WNDPROC);
-    SetWindowLong(m_LWFilters.m_hWnd,GWL_STYLE,m_LWFilters.GetStyle()|LVS_EDITLABELS);
-    SetWindowLong(m_LWFilters.m_hWnd,GWL_USERDATA,(DWORD)this);
-    SetWindowLong(m_LWFilters.m_hWnd,GWL_WNDPROC,(DWORD)ListViewProc);
+    m_OldListViewProc=(WNDPROC)GetWindowLongPtr (m_LWFilters.m_hWnd, GWLP_WNDPROC);
+    SetWindowLongPtr(m_LWFilters.m_hWnd,GWL_STYLE,m_LWFilters.GetStyle()|LVS_EDITLABELS);
+    SetWindowLongPtr(m_LWFilters.m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
+    SetWindowLongPtr(m_LWFilters.m_hWnd,GWLP_WNDPROC,(LONG_PTR)ListViewProc);
     ListView_SetImageList(m_LWFilters.m_hWnd,m_hImageList,LVSIL_SMALL);
     
     SetMetrics();
