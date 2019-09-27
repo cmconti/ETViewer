@@ -1,7 +1,7 @@
 // Persistency_gtest.cpp : Defines the entry point for the console application.
 //
 
-#include "pch.h"
+#include "stdafx.h"
 #include <gtest/gtest.h>
 #include "Persistency.h"
 
