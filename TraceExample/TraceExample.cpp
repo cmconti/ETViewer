@@ -1,4 +1,4 @@
-// TraceExample.cpp : Defines the entry point for the console application.
+﻿// TraceExample.cpp : Defines the entry point for the console application.
 //
 
 #include "stdafx.h"
@@ -11,7 +11,8 @@ int _tmain()
     WPP_INIT_TRACING( L"TraceExample" );
 
     DoTraceMessage(TRACE_DEBUG, _T("Test wide string message %S"), _T("string"));
-    DoTraceMessage(TRACE_DEBUG, "Test narrow string message %s", "string");
+	DoTraceMessage(TRACE_DEBUG, L"Test wide string message %ls", L"string 中文目录");
+	DoTraceMessage(TRACE_DEBUG, "Test narrow string message %s", "string");
 
     DoTraceMessage(TRACE_DEBUG, _T("This is a number %d"), 1);
 
