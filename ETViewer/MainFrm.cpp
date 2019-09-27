@@ -97,14 +97,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
         return -1;
 
     if (!m_MainDialogBar.Create(this, IDD_MAIN_DIALOG_BAR, 
-        CBRS_ALIGN_TOP, AFX_IDW_DIALOGBAR))
+        CBRS_ALIGN_TOP | CBRS_TOOLTIPS, AFX_IDW_DIALOGBAR))
     {
         TRACE0("No se pudo crear el control dialogbar\n");
         return -1;		// No se pudo crear
     }
 
     if (!m_FilterDialogBar.Create(this, IDD_FILTER_DIALOG_BAR, 
-        CBRS_ALIGN_TOP, AFX_IDW_DIALOGBAR))
+        CBRS_ALIGN_TOP | CBRS_TOOLTIPS, AFX_IDW_DIALOGBAR))
     {
         TRACE0("No se pudo crear el control dialogbar\n");
         return -1;		// No se pudo crear
@@ -119,8 +119,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
     }
 
     // TODO: quitarlo si no desea información sobre herramientas
-    m_FilterDialogBar.SetBarStyle(m_FilterDialogBar.GetBarStyle() |	CBRS_TOOLTIPS | CBRS_FLYBY );
-    m_MainDialogBar.SetBarStyle(m_MainDialogBar.GetBarStyle() | CBRS_TOOLTIPS | CBRS_FLYBY );
     m_MainDialogBar.InitDialogBar();
     m_FilterDialogBar.InitDialogBar();
     m_wndReBar.SendMessage(RB_MAXIMIZEBAND,1);
