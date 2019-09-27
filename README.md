@@ -2,13 +2,19 @@
 An alternative to Windows [TraceView](https://docs.microsoft.com/en-us/windows-hardware/drivers/devtest/traceview) utility.
 
 ## Description
-This is a fork of ETViewer project on [codeplex](https://etviewer.codeplex.com/) maintained by
-[Ellery_Pierce](https://www.codeplex.com/site/users/view/Ellery_Pierce) and
-[jmartin](https://www.codeplex.com/site/users/view/jmartin).
-Since codeplex is shutting down I forked
-this project to preserve it for the open source community.
+This is forked from [arbego/ETViewer](https://github.com/arbego/ETViewer)  
+I've labeled arbego's changes as v1.2 and mine as v1.2.x.  I've also left the tested platforms block of text below alone, though I've only tested on Win10 1903 64-bit.
 
-![ETViewer screenshot](http://download-codeplex.sec.s-msft.com/Download?ProjectName=etviewer&DownloadId=279342)
+<div style="margin:30px;padding:5px;border:1px solid black;background-color:#D3E1E4">
+<b>Original Description</b>
+<br>
+This is a fork of ETViewer project on <a href=https://etviewer.codeplex.com/>codeplex</a> maintained by <a href=https://www.codeplex.com/site/users/view/Ellery_Pierce>Ellery_Pierce</a>
+ and <a href=https://www.codeplex.com/site/users/view/jmartin>jmartin</a>.  Since codeplex is shutting down I forked
+this project to preserve it for the open source community.
+</div>
+
+
+![ETViewer screenshot](docs/Home_HighlightSample.jpg)
 
 ## System Requirements
 Windows XP or higher.
@@ -35,8 +41,9 @@ Trace management
 * Column sorting.
 
 Other features
-* Source code visualization with simple sintax highlight.
-* Drag&Drop support.
+* Source code visualization with simple syntax highlight.
+![ETViewer source display](docs/Home_SourceSample.jpg)
+* Drag & Drop support.
 * Clipboard support.
 * Export to text file.
 * File association support (optional).
@@ -49,6 +56,10 @@ Tested platforms
 * W2K not yet supported.
 
 ## Changelog
+
+### Version 1.2
+* Retarget project to VS2017 with v141_XP and v141 toolsets
+* Fixed bug where unicode data did not get copied properly to clipboard
 
 ### Version 1.1
 
