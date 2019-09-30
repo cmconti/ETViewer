@@ -171,7 +171,7 @@ int CETViewerView::OnCreate(LPCREATESTRUCT lpCreateStruct)
     SetTimer(CAPTURE_TIMER,250,NULL);
     SetTimer(SHOW_LAST_TRACE_TIMER,1000,NULL);
 
-    int iCurrentOrder=(m_ColumnInfo.size()-1);
+    int iCurrentOrder=((int)m_ColumnInfo.size()-1);
     while(iCurrentOrder>=0) 
     {
         unsigned x;
@@ -506,7 +506,7 @@ void CETViewerView::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
         HBRUSH hBrush=m_hNormalBrush;
 
         GetTraceColors(pTrace,&pDraw->clrText,&pDraw->clrTextBk,&hPen,&hBrush);
-        DWORD state=GetListCtrl().GetItemState(pDraw->nmcd.dwItemSpec,LVIS_SELECTED|LVIS_FOCUSED);
+        DWORD state=GetListCtrl().GetItemState((int)pDraw->nmcd.dwItemSpec,LVIS_SELECTED|LVIS_FOCUSED);
         if(state&LVIS_SELECTED)
         {
             pDraw->clrText=m_cSelectedTextColor;
@@ -600,7 +600,7 @@ LRESULT CALLBACK CETViewerView::ListViewProc(HWND hwnd, UINT uMsg, WPARAM wParam
             pThis->GetListCtrl().GetItemRect(0,&firstRect,LVIR_BOUNDS);
             pThis->GetListCtrl().GetItemRect(itemCount-1,&lastRect,LVIR_BOUNDS);
 
-            DWORD dwSize=pThis->GetListCtrl().SendMessage(LVM_APPROXIMATEVIEWRECT,-1,MAKELONG(0,pThis->GetListCtrl().GetItemCount()));
+            DWORD dwSize=(DWORD)pThis->GetListCtrl().SendMessage(LVM_APPROXIMATEVIEWRECT,-1,MAKELONG(0,pThis->GetListCtrl().GetItemCount()));
             SIZE size;
             size.cx=LOWORD(dwSize);
             size.cy=HIWORD(dwSize);
@@ -885,7 +885,7 @@ bool CETViewerView::FindAndDeleteAll(const TCHAR *pTextToFind)
     return res;
 }
 
-void CETViewerView::ProcessSpecialKeyStroke(WORD wParam)
+void CETViewerView::ProcessSpecialKeyStroke(WPARAM wParam)
 {
     bool pushedLControl=(GetKeyState(VK_LCONTROL)>>15)?true:false;
     bool pushedRControl=(GetKeyState(VK_RCONTROL)>>15)?true:false;
@@ -1065,7 +1065,7 @@ void CETViewerView::OnSave()
     if(GetListCtrl().GetNextItem(-1,LVNI_SELECTED)!=-1)
     {
         CSaveAllTracesQuestionDialog dialog;
-        int res=dialog.DoModal();
+        INT_PTR res=dialog.DoModal();
         bAllTraces=(res==IDOK);
         if(res==IDCANCEL){return;}
     }
@@ -1382,7 +1382,7 @@ void CETViewerView::ResetShowLastTrace()
 {
     WaitForSingleObject(m_hTracesMutex,INFINITE);
     m_nLastFocusedSequenceIndex=0;
-    unsigned nCount=m_lTraces.size();
+    size_t nCount=m_lTraces.size();
     if(nCount)
     {
         SETViewerTrace *pLastTrace=m_lTraces[nCount-1];

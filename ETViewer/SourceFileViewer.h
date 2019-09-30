@@ -34,7 +34,7 @@ class CSourceFileContainer;
 
 class CSourceFileViewer : public CDialog, public CFindDialogClient
 {
-    DWORD				m_OldEditProc;
+    WNDPROC				m_OldEditProc;
     HFONT				m_hFileFont;
     CHAR				*m_pFileBuffer;
     CHAR				*m_pFileBufferUpper;

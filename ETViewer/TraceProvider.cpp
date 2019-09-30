@@ -508,7 +508,7 @@ eTraceReaderError CTracePDBReader::LoadFromPDB(LPCTSTR pPDB,vector<CTraceProvide
                         typeData.nBaseAddress=dwModuleBase;
                         typeData.pThis=this;
 
-                        // Temporal solution to 64 bit %p parameters.
+                        // Temporary solution to 64 bit %p parameters.
                         // %p parameters are identified as ItemPtr in both 32 and 64 bit PDBs
                         // We need to distinguish this two cases.
                         // For the time being we have no clean solution.

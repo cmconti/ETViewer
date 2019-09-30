@@ -10,6 +10,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TraceExample", "TraceExampl
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ETViewer_gtest", "UnitTests\ETViewer_gtest\ETViewer_gtest.vcxproj", "{1770D30C-6874-460A-A3B6-8E07A515E43B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E84A7E9-CA63-4E9D-92F4-AB7CA4663986}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug_XP|Win32 = Debug_XP|Win32

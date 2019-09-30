@@ -485,7 +485,7 @@ LRESULT CMainFrame::OnIPCCommand(WPARAM wParam,LPARAM lParam)
     TCHAR sCommandLine[1024*10]={0};
     SetForegroundWindow();
     BringToTop(SW_SHOW);
-    GlobalGetAtomName(wParam,sCommandLine,_countof(sCommandLine));
+    GlobalGetAtomName((ATOM)wParam,sCommandLine,_countof(sCommandLine));
     TCHAR *pArgs[]={sCommandLine};
     theApp.ProcessCommandLine(1,pArgs);
     return 0L;

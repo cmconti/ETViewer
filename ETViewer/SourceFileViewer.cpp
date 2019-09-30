@@ -45,7 +45,7 @@ CHAR *g_Separators={" ,.:;'\\\"+-*/%=!?¿<>[](){}\t\n\r&|~^"};
 /////////////////////////////////////////////////////////////////////////////
 // CSourceFileViewer dialog
 
-void SetRichEditTextColor(CRichEditCtrl *pEdit,DWORD begin,DWORD end,COLORREF color)
+void SetRichEditTextColor(CRichEditCtrl *pEdit,long begin,long end,COLORREF color)
 {
     CHARFORMAT format={0};
     format.cbSize=sizeof(format);
@@ -54,7 +54,7 @@ void SetRichEditTextColor(CRichEditCtrl *pEdit,DWORD begin,DWORD end,COLORREF co
     format.dwEffects&=~CFE_AUTOCOLOR;
 
     pEdit->SetSel(begin,end);
-    pEdit->SendMessage(EM_SETCHARFORMAT,SCF_SELECTION,(DWORD)&format);
+    pEdit->SendMessage(EM_SETCHARFORMAT,SCF_SELECTION,(DWORD_PTR)&format);
     pEdit->SetSel(0,0);
 }
 
@@ -76,7 +76,7 @@ CSourceFileViewer::CSourceFileViewer(CSourceFileContainer* pParent /*=NULL*/)
     m_pFileBuffer=NULL;
     m_FileBufferLength=0;
     m_hFileFont=NULL;
-    m_OldEditProc=0;
+    m_OldEditProc=NULL;
     m_SourceFile[0]=0;
     m_SourceLine=0;
 }
@@ -198,7 +198,7 @@ DWORD CSourceFileViewer::OpenFile(const TCHAR *pFile,int line,bool bShowErrorIfF
                                 {
                                     if(strncmp(pToken,g_pKeywords[y],keyLen)==0 && ((offset+keyLen)==(m_FileBufferLength) ||strchr(g_Separators,pToken[keyLen])!=NULL))
                                     {
-                                        int pos=pToken-m_pFileBuffer;
+                                        long pos=(long)(pToken-m_pFileBuffer);
                                         SetRichEditTextColor(&m_EDFile,pos,pos+keyLen,RGB(0,0,255));
                                         break;
                                     }
@@ -235,7 +235,7 @@ DWORD CSourceFileViewer::OpenFile(const TCHAR *pFile,int line,bool bShowErrorIfF
                                 }
                                 x++;
                             }
-                            int pos=pBase-m_pFileBuffer;
+                            long pos=(long)(pBase-m_pFileBuffer);
                             SetRichEditTextColor(&m_EDFile,pos,x,RGB(0,128,0));
                         }
                         if(m_pFileBuffer[x]=='/' && m_pFileBuffer[x+1]=='/')
@@ -249,7 +249,7 @@ DWORD CSourceFileViewer::OpenFile(const TCHAR *pFile,int line,bool bShowErrorIfF
                                 }
                                 x++;
                             }
-                            int pos=pBase-m_pFileBuffer;
+                            long pos=(long)(pBase-m_pFileBuffer);
                             SetRichEditTextColor(&m_EDFile,pos,x,RGB(0,128,0));
                         }
                     }
@@ -297,9 +297,9 @@ BOOL CSourceFileViewer::OnInitDialog()
     StringCbPrintf(logFont.lfFaceName,sizeof(logFont.lfFaceName),_T("Courier"));
 
     m_hFileFont=CreateFontIndirect(&logFont);
-    m_EDFile.SendMessage(WM_SETFONT,(DWORD)m_hFileFont,true);
+    m_EDFile.SendMessage(WM_SETFONT,(WPARAM)m_hFileFont,true);
 
-    m_OldEditProc=GetWindowLongPtr (m_EDFile.m_hWnd, GWLP_WNDPROC);
+    m_OldEditProc=(WNDPROC)GetWindowLongPtr (m_EDFile.m_hWnd, GWLP_WNDPROC);
     SetWindowLongPtr(m_EDFile.m_hWnd,GWLP_WNDPROC,(LONG_PTR)FileEditProc);
     SetWindowLongPtr(m_EDFile.m_hWnd,GWLP_USERDATA,(LONG_PTR)this);
     m_hFindOwner=m_EDFile.m_hWnd;
@@ -417,7 +417,7 @@ LRESULT CALLBACK CSourceFileViewer::FileEditProc(HWND hwnd, UINT uMsg, WPARAM wP
         TCHAR fileToOpen[MAX_PATH]={0};
         pThis->m_EDFile.GetSel(begin,end);
         POINTL P={LOWORD(lParam),HIWORD(lParam)};
-        int TCHARacter=pThis->m_EDFile.SendMessage(EM_CHARFROMPOS,0,(DWORD)&P);
+        long TCHARacter=(long)(pThis->m_EDFile.SendMessage(EM_CHARFROMPOS,0,(LPARAM)&P));
 
         if(TCHARacter<begin || TCHARacter>end || begin==end || begin>end)
         {
@@ -518,7 +518,7 @@ LRESULT CALLBACK CSourceFileViewer::FileEditProc(HWND hwnd, UINT uMsg, WPARAM wP
     {
         long begin=0,end=0;
         pThis->m_EDFile.GetSel(begin,end);
-        LRESULT res=CallWindowProc((WNDPROC)pThis->m_OldEditProc,hwnd,uMsg,wParam,lParam);
+        LRESULT res=CallWindowProc(pThis->m_OldEditProc,hwnd,uMsg,wParam,lParam);
         pThis->m_EDFile.SetSel(begin,end);
         return res;
     }
@@ -553,12 +553,12 @@ LRESULT CALLBACK CSourceFileViewer::FileEditProc(HWND hwnd, UINT uMsg, WPARAM wP
 
     if((uMsg>=WM_KEYFIRST && uMsg<=WM_KEYLAST) || (uMsg>=WM_MOUSEFIRST && uMsg<=WM_MOUSELAST) && uMsg!=WM_MOUSEMOVE)
     {
-        LRESULT res=CallWindowProc((WNDPROC)pThis->m_OldEditProc,hwnd,uMsg,wParam,lParam);
+        LRESULT res=CallWindowProc(pThis->m_OldEditProc,hwnd,uMsg,wParam,lParam);
         pThis->UpdateLine();
         return res;
     }
     
-    return CallWindowProc((WNDPROC)pThis->m_OldEditProc,hwnd,uMsg,wParam,lParam);
+    return CallWindowProc(pThis->m_OldEditProc,hwnd,uMsg,wParam,lParam);
 }
 
 bool CSourceFileViewer::FindAndDeleteAll(const TCHAR *pText)
@@ -594,9 +594,8 @@ bool CSourceFileViewer::FindNext(const TCHAR *pTextToFind)
     m_EDFile.GetSel(begin,end);
     if(begin<0){begin=0;}
 
-    CHAR  textToFind[1024]={0};
     CHAR *pText=NULL,*pBufferToSearchIn=m_bMatchCaseInFind?m_pFileBuffer:m_pFileBufferUpper;
-    WideCharToMultiByte(CP_ACP, 0, m_LastTextToFind.c_str(), m_LastTextToFind.length(), textToFind, _countof(textToFind), 0, 0);
+    CW2AEX<1024> textToFind(m_LastTextToFind.c_str(), CP_ACP);
     if(!m_bMatchCaseInFind){_strupr_s(textToFind, 1024);}
     unsigned textToFindLength=(unsigned)strlen(textToFind);
 
@@ -605,13 +604,13 @@ bool CSourceFileViewer::FindNext(const TCHAR *pTextToFind)
     {
         pText=strrstr(pBufferToSearchIn,begin,textToFind);
         if(pText==NULL){pText=strrstr(pBufferToSearchIn,m_FileBufferLength-1,textToFind);}
-        begin=pText-pBufferToSearchIn;
+        begin=(long)(pText-pBufferToSearchIn);
     }
     else
     {
          pText=strstr(pBufferToSearchIn+end,textToFind);
          if(pText==NULL){pText=strstr(pBufferToSearchIn,textToFind);}
-         begin=pText-pBufferToSearchIn;
+         begin=(long)(pText-pBufferToSearchIn);
     }
 
     CWnd *pParent=GetActiveWindow();

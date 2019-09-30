@@ -179,7 +179,7 @@ LRESULT CALLBACK CHighLightFiltersEditor::ListViewProc(HWND hwnd, UINT uMsg, WPA
             int sel=pThis->m_LWFilters.GetNextItem(-1,LVNI_SELECTED);
             int index=pThis->m_LWFilters.InsertItem(sel==-1?pThis->m_LWFilters.GetItemCount():sel,pFilter->GetText().c_str(),0);
             pThis->m_LWFilters.SetItemState(index,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
-            pThis->m_LWFilters.SetItemData(index,(DWORD)pFilter);
+            pThis->m_LWFilters.SetItemData(index,(DWORD_PTR)pFilter);
             pThis->m_LWFilters.SetCheck(index,true);
             pThis->m_LWFilters.EditLabel(index);
             return 0;
@@ -280,7 +280,7 @@ void CHighLightFiltersEditor::LoadFilters()
         CHightLightFilter *pFilter=new CHightLightFilter;
         *pFilter=theApp.m_HighLightFilters[x];
         int index=m_LWFilters.InsertItem(x,pFilter->GetText().c_str(),0);
-        m_LWFilters.SetItemData(index,(DWORD)pFilter);
+        m_LWFilters.SetItemData(index,(DWORD_PTR)pFilter);
         m_LWFilters.SetCheck(index,pFilter->GetEnabled());
     }
 }
@@ -398,7 +398,7 @@ void CHighLightFiltersEditor::OnCustomDraw(NMHDR* pNMHDR, LRESULT* pResult)
             {
                 RECT R={0,0,0,0},R1={0},R2={0};
 
-                GetItemColorRects(pDraw->nmcd.dwItemSpec,&R1,&R2);
+                GetItemColorRects((int)pDraw->nmcd.dwItemSpec,&R1,&R2);
                 m_LWFilters.GetItemRect((int)pDraw->nmcd.dwItemSpec,&R,LVIR_ICON);
 
                 ::SetDCBrushColor(pDraw->nmcd.hdc,pFilter->GetTextColor());
@@ -434,7 +434,7 @@ void CHighLightFiltersEditor::OnDoubleClick(NMHDR* pNMHDR, LRESULT* pResult)
     if(sel!=-1){m_LWFilters.EditLabel(sel);return;}
     int index=m_LWFilters.InsertItem(sel==-1?m_LWFilters.GetItemCount():sel,pFilter->GetText().c_str(),0);
     m_LWFilters.SetItemState(index,LVIS_SELECTED|LVIS_FOCUSED,LVIS_SELECTED|LVIS_FOCUSED);
-    m_LWFilters.SetItemData(index,(DWORD)pFilter);
+    m_LWFilters.SetItemData(index,(DWORD_PTR)pFilter);
     m_LWFilters.SetCheck(index,true);
     m_LWFilters.EditLabel(index);
     *pResult = 0;

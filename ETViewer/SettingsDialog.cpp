@@ -236,7 +236,7 @@ void CSettingsDialog::AddSourcePath(int index)
     if(pResult)
     {
         SHGetPathFromIDList(pResult,sTempPath);
-        int pathLen=_tcslen(sTempPath);
+        size_t pathLen=_tcslen(sTempPath);
         if(pathLen)
         {
             if(sTempPath[pathLen-1]==_T('\\')){sTempPath[pathLen-1]=0;}

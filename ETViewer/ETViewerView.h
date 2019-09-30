@@ -151,7 +151,7 @@ protected:
     static LRESULT CALLBACK ListViewProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
     static LRESULT CALLBACK ListEditProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 
-    void ProcessSpecialKeyStroke(WORD key);
+    void ProcessSpecialKeyStroke(WPARAM key);
 
     int FindText(const TCHAR* pTextToFind,int baseIndex,bool up,bool stopAtEnd=false);
 

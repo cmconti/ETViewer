@@ -215,54 +215,51 @@ BOOL CETViewerApp::InitInstance()
 void CETViewerApp::SetFileAssociation(TCHAR *pExtension,TCHAR *pFileTypeName,TCHAR *pFileDescription,TCHAR *pCommandLineTag)
 {
     bool bAlreadyPresent=false;
-    HKEY hKey=NULL;
-    DWORD dwError=RegOpenKey(HKEY_CLASSES_ROOT,pExtension,&hKey);
-    if(dwError==ERROR_SUCCESS)
+    CRegKey keyExtension;
+    LSTATUS lError = keyExtension.Open(HKEY_CLASSES_ROOT, pExtension);
+    if(lError==ERROR_SUCCESS)
     {
-        long dwSize=MAX_PATH;
-        TCHAR  sValue[MAX_PATH]={0};
-        dwError=RegQueryValue(hKey,NULL,sValue,&dwSize);
-        if(dwError==ERROR_SUCCESS && _tcscmp(sValue,pFileTypeName)==0)
+        ULONG lSize=MAX_PATH;
+        TCHAR sValue[MAX_PATH]={0};
+        lError= keyExtension.QueryStringValue(NULL, sValue, &lSize);
+        if(lError==ERROR_SUCCESS && _tcscmp(sValue,pFileTypeName)==0)
         {
             bAlreadyPresent=true;
         }
-        RegCloseKey(hKey);
-        hKey=NULL;
+        keyExtension.Close();
     }
     if(!bAlreadyPresent)
     {
-        dwError=RegCreateKey(HKEY_CLASSES_ROOT,pExtension,&hKey);
-        if(dwError==ERROR_SUCCESS)
+        lError= keyExtension.Create(HKEY_CLASSES_ROOT,pExtension);
+        if(lError==ERROR_SUCCESS)
         {
-            dwError=RegSetValue(hKey,NULL,REG_SZ,pFileTypeName,_tcslen(pFileTypeName)+1);
+            lError = keyExtension.SetStringValue(NULL, pFileTypeName, REG_SZ);
+            keyExtension.Close();
         }
-        RegCloseKey(hKey);
-        hKey=NULL;
     }
-    dwError=RegOpenKey(HKEY_CLASSES_ROOT,pFileTypeName,&hKey);
-    if(hKey){RegCloseKey(hKey);hKey=NULL;}
 
-    dwError=RegCreateKey(HKEY_CLASSES_ROOT,pFileTypeName,&hKey);
-    if(dwError==ERROR_SUCCESS)
+    CRegKey keyFileType;
+    lError= keyFileType.Create(HKEY_CLASSES_ROOT,pFileTypeName);
+    if(lError==ERROR_SUCCESS)
     {
-        dwError=RegSetValue(hKey,NULL,REG_SZ,pFileDescription,_tcslen(pFileDescription)+1);
+        lError= keyFileType.SetStringValue(NULL, pFileDescription,REG_SZ);
+        keyFileType.Close();
     }
-    if(hKey){RegCloseKey(hKey);hKey=NULL;}
 
-    if(dwError==ERROR_SUCCESS)
+    if(lError==ERROR_SUCCESS)
     {
-        std::tstring sKeyName = pFileTypeName;
+        CString sKeyName(pFileTypeName);
         sKeyName+=_T("\\shell\\open\\command");
-        dwError=RegCreateKey(HKEY_CLASSES_ROOT,sKeyName.c_str(),&hKey);
-        if(dwError==ERROR_SUCCESS)
+        CRegKey keyShellOpen;
+        lError = keyShellOpen.Create(HKEY_CLASSES_ROOT, sKeyName);
+        if(lError==ERROR_SUCCESS)
         {
             TCHAR pModule[MAX_PATH]={0};
             TCHAR pCommand[MAX_PATH]={0};
             GetModuleFileName(NULL,pModule,MAX_PATH);
             _stprintf_s(pCommand, _T("\"%s\" %s"), pModule, pCommandLineTag);
-            dwError=RegSetValue(hKey,NULL,REG_SZ,pCommand,_tcslen(pCommand)+1);
+            lError= keyShellOpen.SetStringValue(NULL, pCommand, REG_SZ);
         }
-        if(hKey){RegCloseKey(hKey);hKey=NULL;}
     }
 }
 
@@ -279,7 +276,7 @@ BOOL CETViewerApp::ProcessCommandLine(int argc,TCHAR **argw)
 
     for(x=0;x<(ULONG)argc;x++)
     {
-        DWORD dwTmpLen = _tcslen(argw[x])+1;
+        size_t dwTmpLen = _tcslen(argw[x])+1;
         TCHAR *sTemp=new TCHAR [dwTmpLen];
         _tcscpy_s(sTemp,dwTmpLen,argw[x]);
         _tcsupr_s(sTemp,dwTmpLen);
